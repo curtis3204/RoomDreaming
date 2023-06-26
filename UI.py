@@ -10,7 +10,7 @@ import numpy as np
 def Generate(Roomtype, UserNumber, RoomImage, ResultController):
     selectnumber = int(ResultController)
     #read all images in the file
-    allimgspath, selectimgspath = ReadallImages("RoomDreaming_System/RoomImages", selectnumber)
+    allimgspath, selectimgspath = ReadallImages("RoomImages", selectnumber)
     text = "Room Type: " + Roomtype + "\n" + "Number of Users: " + str(UserNumber)  + "\n" + "Result Number Controller: " + str(ResultController)    
     
     outputs = [text]+selectimgspath
@@ -91,26 +91,42 @@ with gr.Blocks() as demo:
             StopIteration = gr.Button("Finish!")
 
 
-        resultimgs = []
+        ResultImgBlock = []
+        likebtns = []
+        dislikebtns = []
+
+        rownum = 4
 
         def GenerateLayout(resultnumber):
-            for i in range(resultnumber//5):
+            for i in range(resultnumber//rownum):
                 with gr.Row():
-                    for i in range(5):
-                        img = gr.outputs.Image(type= "filepath", label="Result Image")
-                        resultimgs.append(img)
-            if resultnumber % 5 != 0:
+                    for i in range(rownum):
+                        with gr.Column():
+                            img = gr.outputs.Image(type= "filepath", label="Result Image")
+                            with gr.Row():
+                                Like = gr.inputs.Checkbox(label="Like")
+                                Dislike = gr.inputs.Checkbox(label="Disike")
+                            ResultImgBlock.append(img)
+                            likebtns.append(Like)
+                            dislikebtns.append(Dislike)
+            if resultnumber % rownum != 0:
                 with gr.Row():
-                    for i in range(resultnumber % 5):
-                        img = gr.outputs.Image(type= "filepath", label="Result Image")
-                        resultimgs.append(img)
-            return resultimgs
+                    for i in range(resultnumber % rownum):
+                        with gr.Column():
+                            img = gr.outputs.Image(type= "filepath", label="Result Image")
+                            with gr.Row():
+                                Like = gr.inputs.Checkbox(label="Like")
+                                Dislike = gr.inputs.Checkbox(label="Disike")
+                            ResultImgBlock.append(img)
+                            likebtns.append(Like)
+                            dislikebtns.append(Dislike)
+            return ResultImgBlock
 
         GenerateLayout(50)        
-        ResultController.change(GenerateLayout, ResultController, resultimgs)
+        # ResultController.change(GenerateLayout, ResultController, resultimgs)
         
 
-        GenerateButton.click(fn = Generate, inputs=[Roomtype, UserNumber, RoomImage, ResultController], outputs=[Banner]+resultimgs)
+        GenerateButton.click(fn = Generate, inputs=[Roomtype, UserNumber, RoomImage, ResultController], outputs=[Banner]+ResultImgBlock)
         
         
 
