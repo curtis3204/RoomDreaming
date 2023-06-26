@@ -35,6 +35,8 @@ def ReadallImages(path, SelectNumber):
     for i in range(SelectNumber):
         SelectImagespath.append(Allimagespath[i])
     
+    #random the order of the images
+    np.random.shuffle(SelectImagespath)
     return Allimagespath, SelectImagespath
 
 
