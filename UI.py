@@ -120,8 +120,6 @@ with gr.Blocks() as demo:
             with gr.Column():
                 gr.Markdown("Room Image")
                 RoomImage = gr.inputs.Image(shape=(224, 224), label="Room Image")
-                
-
                 StartIteration = gr.Button("Start Iteration")
                 
         
@@ -129,8 +127,6 @@ with gr.Blocks() as demo:
         Banner = gr.outputs.Textbox(label="System Log")
         
         with gr.Row():
-            NextIteration = gr.Button("Next Iteration")
-            ClearIteration = gr.Button("Clear Iteration")
             StopIteration = gr.Button("Finish!")
             
 
@@ -142,6 +138,9 @@ with gr.Blocks() as demo:
 
         def generateTab(Tabs, TabNum, ResultImgBlock, likebtns, dislikebtns, groups):
             with gr.Tab("Iteration "+str(TabNum)) as tab:
+                with gr.Row():
+                    globals()["NextIteration"+str(TabNum)] = gr.Button(str(TabNum)+ " - Next Iteration")
+                    globals()["ClearIteration"+str(TabNum)] = gr.Button(str(TabNum)+ " - Clear Iteration")
                 ResultImgBlock, likebtns, dislikebtns , groups= GenerateLayout(50, 4)
             print(tab)
             TabNum += 1
@@ -153,32 +152,24 @@ with gr.Blocks() as demo:
         
 
         a,b,c,d = [], [], [], []
-        e, f, g, h = [], [], [], []
-        generateTab(Tabs, TabNum, a, b, c, d)
-        generateTab(Tabs, TabNum, e, f, g, h)
+        e,f, g, h, i = [], [], [], [], []
+        e, f, g, h, i  = generateTab(Tabs, TabNum, a, b, c, d)
 
-        # 0 ,1 ,2, 3, 4, 5
         
-        def DisplayImg(DisplayNum):
-            DisplayNum = int(DisplayNum)
-            return {ResultImgBlock[i]: gr.update(visible=False) for i in range(len(ResultImgBlock)-1, DisplayNum-1, -1)}
-    
-        def Displaylikebtns(DisplayNum):
-            DisplayNum = int(DisplayNum)
-            return {likebtns[i]: gr.update(visible=False) for i in range(len(likebtns)-1, DisplayNum-1, -1)} 
-
-        def Displaydislikebtns(DisplayNum):
-            DisplayNum = int(DisplayNum)
-            return {dislikebtns[i]: gr.update(visible=False) for i in range(len(dislikebtns)-1, DisplayNum-1, -1)}  
-                
         def Display(DisplayNum):
             DisplayNum = int(DisplayNum)
-            return {**DisplayImg(DisplayNum), **Displaylikebtns(DisplayNum), **Displaydislikebtns(DisplayNum)}
+            return {
+                **{ResultImgBlock[i]: gr.update(visible=False) for i in range(len(ResultImgBlock)-1, DisplayNum-1, -1)}, 
+                **{likebtns[i]: gr.update(visible=False) for i in range(len(likebtns)-1, DisplayNum-1, -1)},
+                **{dislikebtns[i]: gr.update(visible=False) for i in range(len(dislikebtns)-1, DisplayNum-1, -1)}
+                }
 
 
         ConfirmDisplay.click(fn = Display, inputs=[DisplayNum], outputs=ResultImgBlock+likebtns+dislikebtns)
 
         StartIteration.click(fn = Generate, inputs=[Roomtype, UserNumber, RoomImage, GenerateNum, DisplayNum], outputs=[Banner]+ResultImgBlock)
+        NextIteration1.click(fn = Generate, inputs=[Roomtype, UserNumber, RoomImage, GenerateNum, DisplayNum], outputs=[Banner]+f)
+
         
         
 
