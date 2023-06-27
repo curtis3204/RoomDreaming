@@ -122,14 +122,14 @@ with gr.Blocks() as demo:
             with gr.Column():
                 gr.Markdown("Room Image")
                 RoomImage = gr.inputs.Image(shape=(224, 224), label="Room Image")
-                StartIteration = gr.Button("Start Iteration")
+                StartIteration = gr.Button("Start Iteration", variant='primary')
                 
         
         gr.Markdown("## Iteration Results")
         Banner = gr.outputs.Textbox(label="System Log")
         
         with gr.Row():
-            StopIteration = gr.Button("Finish!")
+            StopIteration = gr.Button("Finish!", variant='stop')
             
 
         #Tab Number
@@ -141,7 +141,7 @@ with gr.Blocks() as demo:
         def generateTab(Tabs, TabNum, ResultImgBlock, likebtns, dislikebtns, groups):
             with gr.Tab("Iteration "+str(TabNum)) as tab:
                 with gr.Row():
-                    globals()["NextIteration"+str(TabNum)] = gr.Button(str(TabNum)+ " - Next Iteration")
+                    globals()["NextIteration"+str(TabNum)] = gr.Button(str(TabNum)+ " - Next Iteration", variant='primary')
                     globals()["ClearIteration"+str(TabNum)] = gr.Button(str(TabNum)+ " - Clear Iteration")
                 ResultImgBlock, likebtns, dislikebtns , groups= GenerateLayout(50, 4)
             print(tab)
