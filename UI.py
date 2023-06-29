@@ -41,16 +41,21 @@ def ReadallImages(path, SelectNumber):
 
 
 
-def GenerateOptions(ResultImgBlock, likebtns, dislikebtns):
+def GenerateOptions(ResultImgBlock, Styles, Layouts):
     with gr.Group() as group:
         with gr.Column():
             img = gr.outputs.Image(type= "filepath", label="Result Image")
             with gr.Row():
-                Like = gr.inputs.Checkbox(label="Like")
-                Dislike = gr.inputs.Checkbox(label="Disike")
+                # Like = gr.inputs.Checkbox(label="Like")
+                # Dislike = gr.inputs.Checkbox(label="Disike")
+                with gr.Column():
+                    gr.Markdown("### Score of Design Style 設計風格", elem_classes=["test"])
+                    StyleScore = gr.Slider(minimum=0, maximum=10, step=1, default=5, label="Design Style: Score")
+                    gr.Markdown("### Score of Design Layout 設計布局")
+                    LayoutScore = gr.Slider(minimum=0, maximum=10, step=1, default=5, label="Design Layout: Score")
             ResultImgBlock.append(img)
-            likebtns.append(Like)
-            dislikebtns.append(Dislike)
+            Styles.append(StyleScore)
+            Layouts.append(LayoutScore)
     return group
 
 
@@ -58,8 +63,8 @@ def GenerateOptions(ResultImgBlock, likebtns, dislikebtns):
 
 def GenerateLayout(Total = 50, rownum=4):
     ResultImgBlock = []
-    likebtns = []
-    dislikebtns = []
+    Styles = []
+    Layouts = []
     Groups = []
 
     Total = int(Total)
@@ -68,14 +73,14 @@ def GenerateLayout(Total = 50, rownum=4):
     for i in range(Total//rownum):
         with gr.Row():
             for i in range(rownum):
-                group = GenerateOptions(ResultImgBlock, likebtns, dislikebtns)
+                group = GenerateOptions(ResultImgBlock, Styles, Layouts)
                 Groups.append(group)
     if Total % rownum != 0:
         with gr.Row():
             for i in range(Total % rownum):
-                group = GenerateOptions(ResultImgBlock, likebtns, dislikebtns)
+                group = GenerateOptions(ResultImgBlock, Styles, Layouts)
                 Groups.append(group)
-    return ResultImgBlock, likebtns, dislikebtns, Groups
+    return ResultImgBlock, Styles, Layouts, Groups
 
 
 
