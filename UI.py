@@ -6,7 +6,6 @@ import numpy as np
 
 
 
-
 def Generate(Roomtype, UserNumber, RoomImage, Generatenumber, Displaynumber):
     #read all images in the file
     allimgspath, selectimgspath = ReadallImages("RoomImages", Generatenumber)
@@ -42,6 +41,7 @@ def ReadallImages(path, SelectNumber):
 
 
 def GenerateOptions(ResultImgBlock, Styles, Layouts):
+
     with gr.Group() as group:
         with gr.Column():
             img = gr.outputs.Image(type= "filepath", label="Result Image")
@@ -56,6 +56,8 @@ def GenerateOptions(ResultImgBlock, Styles, Layouts):
             ResultImgBlock.append(img)
             Styles.append(StyleScore)
             Layouts.append(LayoutScore)
+
+
     return group
 
 
