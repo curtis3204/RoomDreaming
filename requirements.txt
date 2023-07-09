@@ -1,0 +1,7 @@
+diffusers
+transformers
+accelerate
+torch
+opencv-python
+huggingface_hub
+Pillow==9.5.0
